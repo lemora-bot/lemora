@@ -1,18 +1,24 @@
 <div align="center">
   <img src="assets/images/lemora-banner.svg" alt="Lemora Wallet Tracker" width="800"/>
-  
+
   # Lemora Wallet Tracker
-  
+
   ### Advanced AI-Powered Trading Signals & Wallet Monitoring for Solana
-  
-[![GitHub Stars](https://img.shields.io/github/stars/lemora-github/lemora-github?style=social)](https://github.com/lemora-github/lemora-github/stargazers)
-[![Twitter](https://img.shields.io/badge/Twitter-@Lemorabot-1DA1F2.svg?style=social&logo=twitter)](https://x.com/Lemorabot)
-  
-  ---
-  
-  **The Ultimate Solana Wallet Tracker** - Monitor whale movements, detect insider trading, and receive AI-powered trading signals in real-time.
-  
+
 </div>
+
+---
+
+## Welcome to Lemora Wallet Tracker
+
+Lemora Wallet Tracker is the forefront of Solana wallet monitoring, brought to you as a sophisticated Chrome extension that revolutionizes how you monitor and analyze activities on the Solana blockchain. Featuring a combination of real-time data streaming, artificial intelligence, and elite analytics, Lemora provides unrivaled insights into wallet movements and trading patterns.
+
+Whether you're tracking large wallet movements, looking for trading anomalies, or seeking the next big opportunity, Lemora delivers the essential tools and intelligence required to stay ahead of the curve.
+
+---
+
+[![GitHub Stars](https://img.shields.io/github/stars/lemora-bot/lemora-bot?style=social)](https://github.com/lemora-bot/lemora-bot/stargazers)
+[![Twitter](https://img.shields.io/badge/Twitter-@Lemorabot-1DA1F2.svg?style=social&logo=twitter)](https://twitter.com/LemoraBot)
 
 ## Technical Overview
 
@@ -41,23 +47,31 @@ Lemora Wallet Tracker is a sophisticated Chrome extension built with TypeScript 
 
 ```
 lemora-bot/
-├── 📂 .changeset/          # Version management
-├── 📂 .codesandbox/        # CodeSandbox configuration
-├── 📂 .github/             # GitHub workflows and templates
-├── 📂 .husky/              # Git hooks
-├── 📂 docs/                # 📚 Documentation hub
-├── 📂 examples/            # Usage examples and demos
-├── 📂 packages/            # Monorepo packages
-├── 📂 src/                 # 💻 Source code
-│   ├── 📂 api/             # API integrations
-│   ├── 📂 components/      # UI components
-│   ├── 📂 filters/         # Transaction filtering
-│   ├── 📂 services/        # Business logic
-│   ├── 📂 types/           # TypeScript definitions
-│   ├── 📂 utils/           # Utility functions
-│   └── 📂 websocket/       # Real-time communication
-├── ⚙️ Configuration files
-└── 📄 Documentation
+├── .changeset/          # Version management
+├── .codesandbox/        # CodeSandbox configuration
+├── .github/             # GitHub workflows and templates
+├── .husky/              # Git hooks
+├── docs/                # Documentation hub
+│   ├── technical/       # Technical documentation
+│   ├── api/             # API documentation
+│   └── user-guide/      # User guides
+├── examples/            # Usage examples and demos
+├── packages/            # Monorepo packages
+├── src/                 # Source code
+│   ├── background/      # Extension background scripts
+│   ├── content/         # Content scripts
+│   ├── popup/           # Extension popup interface
+│   ├── components/      # UI components
+│   ├── services/        # Business logic services
+│   ├── types/           # TypeScript definitions
+│   └── utils/           # Utility functions
+├── tests/               # Test suites
+│   ├── unit/            # Unit tests
+│   ├── integration/     # Integration tests
+│   └── e2e/             # End-to-end tests
+├── assets/              # Static assets
+├── build/               # Build artifacts
+└── dist/                # Distribution files
 ```
 
 ## Quick Start
@@ -79,34 +93,33 @@ lemora-bot/
 
 ## Documentation
 
-- [📖 User Guide](docs/user-guide.md)
-- [🔧 API Reference](docs/api-reference.md)
-- [⚡ WebSocket Documentation](docs/websocket.md)
-- [🎯 Filter System Guide](docs/filters.md)
-- [🔐 Security Architecture](docs/security.md)
-- [🚀 Deployment Guide](docs/deployment.md)
+- [User Guide](docs/user-guide/README.md)
+- [API Reference](docs/api/README.md)
+- [Technical Architecture](docs/technical/architecture.md)
+- [Deployment Guide](docs/technical/deployment.md)
+- [Contributing Guide](CONTRIBUTING.md)
 
 ## Core Components
 
-### 🌐 WebSocket Backend
+### WebSocket Backend
 Real-time connection management with automatic reconnection and load balancing across multiple Helius API keys.
 
-**Files:** `src/websocket/connection.ts`, `src/websocket/handlers.ts`
+**Files:** `src/services/websocket.service.ts`
 
-### 🎯 Smart Filters
+### Smart Filters
 Advanced transaction filtering with customizable rules engine for spam detection and signal identification.
 
-**Files:** `src/filters/transaction.ts`, `src/filters/rules.ts`
+**Files:** `src/utils/wallet.utils.ts`
 
-### 📊 API Services
+### API Services
 Integrated connections to Helius, Birdeye, and Jupiter for comprehensive market data.
 
-**Files:** `src/services/api.service.ts`, `src/api/helius.ts`, `src/api/birdeye.ts`
+**Files:** `src/services/api.service.ts`, `src/services/solana-wallet.service.ts`
 
-### 🎨 UI Components
+### UI Components
 Modern, responsive interface with dark theme and real-time updates.
 
-**Files:** `src/ui/sidepanel/`, `src/components/`
+**Files:** `src/components/WalletOverview.tsx`, `src/popup/popup.html`
 
 ## Contributing
 
@@ -118,11 +131,12 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Links
 
-- [🌐 Website](https://lemora-bot.com)
-- [📱 Chrome Store](https://chrome.google.com/webstore/detail/lemora-bot)
-- [🐦 Twitter](https://twitter.com/LemoraBot)
-- [💬 Discord](https://discord.gg/lemora-bot)
-- [📧 Support](mailto:support@lemora-bot.com)
+- [Website](https://lemora-bot.com)
+- [Chrome Store](https://chrome.google.com/webstore/detail/lemora-bot)
+- [GitHub Repository](https://github.com/lemora-bot/lemora-bot)
+- [Twitter](https://twitter.com/LemoraBot)
+- [Discord](https://discord.gg/lemora-bot)
+- [Support](mailto:support@lemora-bot.com)
 
 ---
 
