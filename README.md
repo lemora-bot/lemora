@@ -93,9 +93,11 @@ lemora-bot/
 
 ## Documentation
 
+- [User Guide](docs/user-guide/README.md)  <!-- Placeholder for future content -->
+- [API Reference](docs/api/README.md)
+- [Technical Architecture](docs/technical/architecture.md)
+- [Deployment Guide](docs/technical/deployment.md)
 - [Contributing Guide](CONTRIBUTING.md)
-
-Additional documentation will be added as the project develops. For now, refer to the code comments and this README for implementation details.
 
 ## Core Components
 
