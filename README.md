@@ -1,7 +1,11 @@
 <div align="center">
   <img src="assets/images/lemora-banner.svg" alt="Lemora Wallet Tracker" width="800"/>
 
-  # Lemora Wallet Tracker
+# Lemora Wallet Tracker
+
+---
+
+![Helius](https://img.shields.io/badge/-Helius-blueviolet) ![Solana](https://img.shields.io/badge/-Solana-282c4d) ![Web3](https://img.shields.io/badge/-Web3-brightgreen) ![Node.js](https://img.shields.io/badge/-Node.js-6da55f) ![TypeScript](https://img.shields.io/badge/-TypeScript-007acc) ![React](https://img.shields.io/badge/-React-61dafb) ![Chrome](https://img.shields.io/badge/-Chrome-4285f4) ![API](https://img.shields.io/badge/-API-red) ![Machine Learning](https://img.shields.io/badge/-Machine%20Learning-orange) ![Real-Time](https://img.shields.io/badge/-Real--Time-ff69b4) ![Security](https://img.shields.io/badge/-Security-yellow)
 
   ### Advanced AI-Powered Trading Signals & Wallet Monitoring for Solana
 
@@ -93,7 +97,7 @@ lemora-bot/
 
 ## Documentation
 
-- [User Guide](docs/user-guide/README.md)  <!-- Placeholder for future content -->
+- [User Guide](docs/user-guide/README.md)
 - [API Reference](docs/api/README.md)
 - [Technical Architecture](docs/technical/architecture.md)
 - [Deployment Guide](docs/technical/deployment.md)
