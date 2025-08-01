@@ -1,0 +1,11 @@
+node_modules/
+build/
+dist/
+*.min.js
+coverage/
+.nyc_output/
+docs/
+examples/
+packages/*/lib/
+packages/*/es/
+*.d.ts

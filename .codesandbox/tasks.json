@@ -1,0 +1,27 @@
+{
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "npm install"
+    }
+  ],
+  "tasks": {
+    "dev": {
+      "name": "Development",
+      "command": "npm run dev",
+      "runAtStart": true
+    },
+    "build": {
+      "name": "Build Extension",
+      "command": "npm run build"
+    },
+    "test": {
+      "name": "Run Tests",
+      "command": "npm run test"
+    },
+    "lint": {
+      "name": "Lint Code",
+      "command": "npm run lint"
+    }
+  }
+}
