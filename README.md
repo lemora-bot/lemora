@@ -1,66 +1,127 @@
-# Lemora Wallet Tracker
+<div align="center">
+  <img src="assets/images/lemora-banner.svg" alt="Lemora Wallet Tracker" width="800"/>
+  
+  # 🚀 Lemora Wallet Tracker
+  
+  ### Advanced AI-Powered Trading Signals & Wallet Monitoring for Solana
+  
+  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)](https://github.com/lemora-github/lemora-github/releases)
+  [![Chrome Store](https://img.shields.io/badge/Chrome_Web_Store-Install-green.svg?style=for-the-badge&logo=googlechrome)](https://chrome.google.com/webstore/detail/lemora-wallet-tracker)
+  [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=for-the-badge)](LICENSE)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Solana](https://img.shields.io/badge/Solana-9945FF?style=for-the-badge&logo=solana&logoColor=white)](https://solana.com)
+  
+  [![Twitter](https://img.shields.io/badge/Twitter-@LemoraTracker-1DA1F2.svg?style=social&logo=twitter)](https://twitter.com/LemoraTracker)
+  [![Discord](https://img.shields.io/badge/Discord-Join_Community-7289DA.svg?style=social&logo=discord)](https://discord.gg/lemora-tracker)
+  [![GitHub Stars](https://img.shields.io/github/stars/lemora-github/lemora-github?style=social)](https://github.com/lemora-github/lemora-github/stargazers)
+  
+  ---
+  
+  🎯 **The Ultimate Solana Wallet Tracker** - Monitor whale movements, detect insider trading, and receive AI-powered trading signals in real-time.
+  
+</div>
 
-This document provides detailed information on the structure and functionality of the Lemora Wallet Tracker.
+## 🌟 Features
+
+- 🔄 **Real-time Transaction Monitoring** - Track wallet activities instantly
+- 🎯 **Smart Filtering System** - Advanced rules engine for transaction filtering
+- 📊 **Market Data Integration** - Live prices from Birdeye and Jupiter APIs
+- 🚨 **Alert System** - Custom notifications for trading opportunities
+- 🔐 **Secure Architecture** - Non-custodial, privacy-focused design
+- 📱 **Chrome Extension** - Seamless browser integration
+- 🌐 **Multi-Wallet Support** - Track multiple wallets simultaneously
+- ⚡ **WebSocket Streaming** - Ultra-low latency data feeds
+
+## 📁 Project Structure
+
+```
+lemora-bot/
+├── 📂 .changeset/          # Version management
+├── 📂 .codesandbox/        # CodeSandbox configuration
+├── 📂 .github/             # GitHub workflows and templates
+├── 📂 .husky/              # Git hooks
+├── 📂 docs/                # 📚 Documentation hub
+├── 📂 examples/            # Usage examples and demos
+├── 📂 packages/            # Monorepo packages
+├── 📂 src/                 # 💻 Source code
+│   ├── 📂 api/             # API integrations
+│   ├── 📂 components/      # UI components
+│   ├── 📂 filters/         # Transaction filtering
+│   ├── 📂 services/        # Business logic
+│   ├── 📂 types/           # TypeScript definitions
+│   ├── 📂 utils/           # Utility functions
+│   └── 📂 websocket/       # Real-time communication
+├── ⚙️ Configuration files
+└── 📄 Documentation
+```
+
+## 🚀 Quick Start
+
+1. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Build Extension**
+   ```bash
+   npm run build
+   ```
+
+3. **Load in Chrome**
+   - Open `chrome://extensions/`
+   - Enable Developer mode
+   - Click "Load unpacked" and select `dist/` folder
+
+## 📚 Documentation
+
+- [📖 User Guide](docs/user-guide.md)
+- [🔧 API Reference](docs/api-reference.md)
+- [⚡ WebSocket Documentation](docs/websocket.md)
+- [🎯 Filter System Guide](docs/filters.md)
+- [🔐 Security Architecture](docs/security.md)
+- [🚀 Deployment Guide](docs/deployment.md)
+
+## 🛠️ Core Components
+
+### 🌐 WebSocket Backend
+Real-time connection management with automatic reconnection and load balancing across multiple Helius API keys.
+
+**Files:** `src/websocket/connection.ts`, `src/websocket/handlers.ts`
+
+### 🎯 Smart Filters
+Advanced transaction filtering with customizable rules engine for spam detection and signal identification.
+
+**Files:** `src/filters/transaction.ts`, `src/filters/rules.ts`
+
+### 📊 API Services
+Integrated connections to Helius, Birdeye, and Jupiter for comprehensive market data.
+
+**Files:** `src/services/api.service.ts`, `src/api/helius.ts`, `src/api/birdeye.ts`
+
+### 🎨 UI Components
+Modern, responsive interface with dark theme and real-time updates.
+
+**Files:** `src/ui/sidepanel/`, `src/components/`
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [🌐 Website](https://lemora-bot.com)
+- [📱 Chrome Store](https://chrome.google.com/webstore/detail/lemora-bot)
+- [🐦 Twitter](https://twitter.com/LemoraBot)
+- [💬 Discord](https://discord.gg/lemora-bot)
+- [📧 Support](mailto:support@lemora-bot.com)
 
 ---
 
-## Table of Contents
-
-- [Navigation System](#navigation-system)
-- [WebSocket Backend](#websocket-backend)
-- [Transaction Filters](#transaction-filters)
-- [Side Panel](#side-panel)
-- [Red Cube](#red-cube)
-- [Backend Implementation](#backend-implementation)
-
----
-
-## Navigation System
-
-Handles navigation logic and component rendering.
-
-### Files
-- `src/navigation/navigation.ts`
-- `src/navigation/handlers.ts`
-
-## WebSocket Backend
-
-Manages real-time communication with Solana API.
-
-### Files
-- `src/websocket/connection.ts`
-- `src/websocket/handlers.ts`
-
-## Transaction Filters
-
-Processes transaction data and applies filters.
-
-### Files
-- `src/filters/transaction.ts`
-- `src/filters/rules.ts`
-
-## Side Panel
-
-Creates and manages the UI side panel.
-
-### Files
-- `src/ui/sidepanel/sidepanel.ts`
-- `src/ui/sidepanel/sidepanel.css`
-
-## Red Cube
-
-Implements 3D graphics for UI enhancement.
-
-### Files
-- `src/ui/three-cube/cube.ts`
-
-## Backend Implementation
-
-Details about backend logic and processing.
-
-### Files
-- `src/backend/api.ts`
-- `src/backend/security.ts`
-
----
+<p align="center">
+  <i>Built with ❤️ for the Solana community</i>
+</p>
 
