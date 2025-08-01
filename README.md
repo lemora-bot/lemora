@@ -14,16 +14,28 @@
   
 </div>
 
-## Features
+## Technical Overview
 
-- **Real-time Transaction Monitoring** - Track wallet activities instantly
-- **Smart Filtering System** - Advanced rules engine for transaction filtering
-- **Market Data Integration** - Live prices from Birdeye and Jupiter APIs
-- **Alert System** - Custom notifications for trading opportunities
-- **Secure Architecture** - Non-custodial, privacy-focused design
-- **Chrome Extension** - Seamless browser integration
-- **Multi-Wallet Support** - Track multiple wallets simultaneously
-- **WebSocket Streaming** - Ultra-low latency data feeds
+Lemora Wallet Tracker is a sophisticated Chrome extension built with TypeScript that provides real-time monitoring and analysis of Solana blockchain wallet activities. The application leverages modern web technologies and advanced algorithmic approaches to deliver comprehensive trading insights.
+
+### Core Features
+
+- **Real-time Transaction Monitoring:** Utilizes WebSocket connections to Solana RPC endpoints for instantaneous transaction detection with sub-second latency
+- **Advanced Filtering Engine:** Implements complex rule-based filtering system with pattern matching, statistical analysis, and machine learning components
+- **Multi-API Integration:** Seamlessly connects to Helius, Birdeye, Jupiter, and other major Solana data providers with automatic failover mechanisms
+- **Intelligent Alert System:** Features customizable notification triggers with support for multiple delivery channels including push notifications, email, and webhooks
+- **Security-First Architecture:** Employs zero-knowledge principles with client-side encryption and minimal data retention policies
+- **Cross-Platform Extension:** Optimized Chrome extension with support for Manifest V3 and modern web extension APIs
+- **Concurrent Wallet Tracking:** Scalable architecture supporting simultaneous monitoring of unlimited wallet addresses
+- **High-Performance Data Streaming:** Efficient WebSocket implementation with connection pooling and automatic reconnection logic
+
+### Architecture Highlights
+
+- **Microservices Design:** Modular architecture with separate services for data collection, processing, and user interface
+- **Event-Driven Processing:** Asynchronous event handling with message queuing for optimal performance
+- **Caching Strategy:** Multi-layer caching with Redis-compatible storage for frequently accessed data
+- **Rate Limiting:** Intelligent API rate limiting with exponential backoff and request batching
+- **Error Recovery:** Comprehensive error handling with automatic retry mechanisms and graceful degradation
 
 ## Project Structure
 
