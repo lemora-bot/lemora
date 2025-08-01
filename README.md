@@ -93,11 +93,9 @@ lemora-bot/
 
 ## Documentation
 
-- [User Guide](docs/user-guide/README.md)
-- [API Reference](docs/api/README.md)
-- [Technical Architecture](docs/technical/architecture.md)
-- [Deployment Guide](docs/technical/deployment.md)
 - [Contributing Guide](CONTRIBUTING.md)
+
+Additional documentation will be added as the project develops. For now, refer to the code comments and this README for implementation details.
 
 ## Core Components
 
@@ -109,7 +107,7 @@ Real-time connection management with automatic reconnection and load balancing a
 ### Smart Filters
 Advanced transaction filtering with customizable rules engine for spam detection and signal identification.
 
-**Files:** `src/utils/wallet.utils.ts`
+**Files:** `src/utils/websocket.util.ts`
 
 ### API Services
 Integrated connections to Helius, Birdeye, and Jupiter for comprehensive market data.
