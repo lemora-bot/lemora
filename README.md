@@ -1,38 +1,31 @@
 <div align="center">
   <img src="assets/images/lemora-banner.svg" alt="Lemora Wallet Tracker" width="800"/>
   
-  # 🚀 Lemora Wallet Tracker
+  # Lemora Wallet Tracker
   
   ### Advanced AI-Powered Trading Signals & Wallet Monitoring for Solana
   
-  [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)](https://github.com/lemora-github/lemora-github/releases)
-  [![Chrome Store](https://img.shields.io/badge/Chrome_Web_Store-Install-green.svg?style=for-the-badge&logo=googlechrome)](https://chrome.google.com/webstore/detail/lemora-wallet-tracker)
-  [![License](https://img.shields.io/badge/license-MIT-orange.svg?style=for-the-badge)](LICENSE)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Solana](https://img.shields.io/badge/Solana-9945FF?style=for-the-badge&logo=solana&logoColor=white)](https://solana.com)
-  
-  [![Twitter](https://img.shields.io/badge/Twitter-@LemoraTracker-1DA1F2.svg?style=social&logo=twitter)](https://twitter.com/LemoraTracker)
-  [![Discord](https://img.shields.io/badge/Discord-Join_Community-7289DA.svg?style=social&logo=discord)](https://discord.gg/lemora-tracker)
-  [![GitHub Stars](https://img.shields.io/github/stars/lemora-github/lemora-github?style=social)](https://github.com/lemora-github/lemora-github/stargazers)
+[![GitHub Stars](https://img.shields.io/github/stars/lemora-github/lemora-github?style=social)](https://github.com/lemora-github/lemora-github/stargazers)
+[![Twitter](https://img.shields.io/badge/Twitter-@Lemorabot-1DA1F2.svg?style=social&logo=twitter)](https://x.com/Lemorabot)
   
   ---
   
-  🎯 **The Ultimate Solana Wallet Tracker** - Monitor whale movements, detect insider trading, and receive AI-powered trading signals in real-time.
+  **The Ultimate Solana Wallet Tracker** - Monitor whale movements, detect insider trading, and receive AI-powered trading signals in real-time.
   
 </div>
 
-## 🌟 Features
+## Features
 
-- 🔄 **Real-time Transaction Monitoring** - Track wallet activities instantly
-- 🎯 **Smart Filtering System** - Advanced rules engine for transaction filtering
-- 📊 **Market Data Integration** - Live prices from Birdeye and Jupiter APIs
-- 🚨 **Alert System** - Custom notifications for trading opportunities
-- 🔐 **Secure Architecture** - Non-custodial, privacy-focused design
-- 📱 **Chrome Extension** - Seamless browser integration
-- 🌐 **Multi-Wallet Support** - Track multiple wallets simultaneously
-- ⚡ **WebSocket Streaming** - Ultra-low latency data feeds
+- **Real-time Transaction Monitoring** - Track wallet activities instantly
+- **Smart Filtering System** - Advanced rules engine for transaction filtering
+- **Market Data Integration** - Live prices from Birdeye and Jupiter APIs
+- **Alert System** - Custom notifications for trading opportunities
+- **Secure Architecture** - Non-custodial, privacy-focused design
+- **Chrome Extension** - Seamless browser integration
+- **Multi-Wallet Support** - Track multiple wallets simultaneously
+- **WebSocket Streaming** - Ultra-low latency data feeds
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 lemora-bot/
@@ -55,7 +48,7 @@ lemora-bot/
 └── 📄 Documentation
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 1. **Install Dependencies**
    ```bash
@@ -72,7 +65,7 @@ lemora-bot/
    - Enable Developer mode
    - Click "Load unpacked" and select `dist/` folder
 
-## 📚 Documentation
+## Documentation
 
 - [📖 User Guide](docs/user-guide.md)
 - [🔧 API Reference](docs/api-reference.md)
@@ -81,7 +74,7 @@ lemora-bot/
 - [🔐 Security Architecture](docs/security.md)
 - [🚀 Deployment Guide](docs/deployment.md)
 
-## 🛠️ Core Components
+## Core Components
 
 ### 🌐 WebSocket Backend
 Real-time connection management with automatic reconnection and load balancing across multiple Helius API keys.
@@ -103,15 +96,15 @@ Modern, responsive interface with dark theme and real-time updates.
 
 **Files:** `src/ui/sidepanel/`, `src/components/`
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🔗 Links
+## Links
 
 - [🌐 Website](https://lemora-bot.com)
 - [📱 Chrome Store](https://chrome.google.com/webstore/detail/lemora-bot)
@@ -120,8 +113,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - [📧 Support](mailto:support@lemora-bot.com)
 
 ---
-
-<p align="center">
-  <i>Built with ❤️ for the Solana community</i>
-</p>
 
