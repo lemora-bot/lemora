@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lemora Wallet Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <img src="../assets/icons/icon32.png" alt="Lemora">
+      <h1>Lemora</h1>
+    </div>
+    <div class="status-indicator" id="connectionStatus">
+      <span class="status-dot offline"></span>
+      <span class="status-text">Connecting...</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-button" data-tab="wallets">Wallets</button>
+    <button class="tab-button" data-tab="signals">Signals</button>
+    <button class="tab-button" data-tab="settings">Settings</button>
+  </div>
+
+  <div class="tab-content">
+    <!-- Dashboard Tab -->
+    <div id="dashboard" class="tab-panel active">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="watchedWalletsCount">0</div>
+          <div class="stat-label">Watched Wallets</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalTransactions">0</div>
+          <div class="stat-label">Total Transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="activeSignals">0</div>
+          <div class="stat-label">Active Signals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="totalVolume">$0</div>
+          <div class="stat-label">Total Volume</div>
+        </div>
+      </div>
+
+      <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <div id="activityList" class="activity-list">
+          <div class="activity-item placeholder">
+            <div class="activity-icon">📊</div>
+            <div class="activity-details">
+              <div class="activity-title">No recent activity</div>
+              <div class="activity-subtitle">Add wallets to start tracking</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wallets Tab -->
+    <div id="wallets" class="tab-panel">
+      <div class="add-wallet-section">
+        <div class="input-group">
+          <input type="text" id="walletAddressInput" placeholder="Enter Solana wallet address...">
+          <button id="addWalletBtn" class="btn-primary">Add</button>
+        </div>
+      </div>
+
+      <div class="wallet-list" id="walletList">
+        <div class="wallet-item placeholder">
+          <div class="wallet-info">
+            <div class="wallet-address">No wallets added yet</div>
+            <div class="wallet-stats">Add a wallet address to start tracking</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signals Tab -->
+    <div id="signals" class="tab-panel">
+      <div class="signals-filter">
+        <select id="signalTypeFilter">
+          <option value="all">All Signals</option>
+          <option value="whale_movement">Whale Movement</option>
+          <option value="smart_money">Smart Money</option>
+          <option value="insider_trading">Insider Trading</option>
+        </select>
+      </div>
+
+      <div class="signals-list" id="signalsList">
+        <div class="signal-item placeholder">
+          <div class="signal-info">
+            <div class="signal-title">No active signals</div>
+            <div class="signal-subtitle">Signals will appear here when detected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="settings" class="tab-panel">
+      <div class="settings-section">
+        <h3>Notifications</h3>
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="enableNotifications" checked>
+            Enable desktop notifications
+          </label>
+        </div>
+        <div class="setting-item">
+          <label>
+            <input type="checkbox" id="enableSounds" checked>
+            Enable notification sounds
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Tracking</h3>
+        <div class="setting-item">
+          <label for="refreshInterval">Refresh interval (seconds):</label>
+          <input type="number" id="refreshInterval" value="30" min="10" max="300">
+        </div>
+        <div class="setting-item">
+          <label for="minTransactionValue">Minimum transaction value (SOL):</label>
+          <input type="number" id="minTransactionValue" value="1" min="0" step="0.1">
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3>Data</h3>
+        <button id="clearDataBtn" class="btn-secondary">Clear All Data</button>
+        <button id="exportDataBtn" class="btn-secondary">Export Data</button>
+      </div>
+
+      <div class="settings-section">
+        <h3>About</h3>
+        <div class="about-info">
+          <p>Lemora Wallet Tracker v1.0.0</p>
+          <p>Advanced Solana wallet monitoring and trading signals</p>
+          <div class="links">
+            <a href="https://x.com/Lemorabot" target="_blank">Twitter</a>
+            <a href="https://github.com/lemora-bot/lemora-bot" target="_blank">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
