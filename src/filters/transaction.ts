@@ -18,205 +18,71 @@ export interface FilterOptions {
   };
 }
 
-export class TransactionFilter {
-  private blacklistedTokens: Set<string> = new Set();
-  private whitelistedWallets: Set<string> = new Set();
-  
-  constructor() {
-    this.initializeDefaultFilters();
+export class QuickClassifier {
+  classifyTransaction(tx: Transaction): 'BUY' | 'SELL' | 'TRANSFER' | 'OTHER' {
+    if (tx.type === 'SWAP') {
+      return tx.amount > 0 ? 'BUY' : 'SELL';
+    }
+    if (tx.type === 'TRANSFER') {
+      return 'TRANSFER';
+    }
+    return 'OTHER';
   }
 
-  /**
-   * Initializes default filter configurations
-   */
-  private initializeDefaultFilters(): void {
-    // Add common spam tokens to blacklist
-    this.blacklistedTokens.add('spam-token-address-1');
-    this.blacklistedTokens.add('spam-token-address-2');
+  isSignificantTrade(tx: Transaction, minValue = 100): boolean {
+    return (tx.amount * (tx.price || 0)) >= minValue;
   }
 
-  /**
-   * Filters transactions based on provided options
-   */
-  public filterTransactions(
-    transactions: Transaction[], 
-    options: FilterOptions
-  ): Transaction[] {
-    return transactions.filter(tx => {
-      // Check if token is blacklisted
-      if (this.isBlacklisted(tx.token.address)) {
-        return false;
-      }
+  getTradeSize(tx: Transaction): 'SMALL' | 'MEDIUM' | 'LARGE' | 'WHALE' {
+    const value = tx.amount * (tx.price || 0);
+    if (value < 100) return 'SMALL';
+    if (value < 1000) return 'MEDIUM';
+    if (value < 10000) return 'LARGE';
+    return 'WHALE';
+  }
 
-      // Apply amount filters
-      if (!this.passesAmountFilter(tx, options)) {
-        return false;
-      }
+  getRecentTrades(transactions: Transaction[], hours = 24): Transaction[] {
+    const cutoff = Date.now() - (hours * 60 * 60 * 1000);
+    return transactions.filter(tx => tx.timestamp >= cutoff);
+  }
 
-      // Apply token address filter
-      if (!this.passesTokenFilter(tx, options)) {
-        return false;
+  groupByToken(transactions: Transaction[]): Map<string, Transaction[]> {
+    const groups = new Map<string, Transaction[]>();
+    
+    transactions.forEach(tx => {
+      const token = tx.token?.address || 'SOL';
+      if (!groups.has(token)) {
+        groups.set(token, []);
       }
-
-      // Apply wallet address filter
-      if (!this.passesWalletFilter(tx, options)) {
-        return false;
-      }
-
-      // Apply transaction type filter
-      if (!this.passesTypeFilter(tx, options)) {
-        return false;
-      }
-
-      // Apply date range filter
-      if (!this.passesDateFilter(tx, options)) {
-        return false;
-      }
-
-      return true;
+      groups.get(token)!.push(tx);
     });
-  }
-
-  /**
-   * Checks if a token is blacklisted
-   */
-  private isBlacklisted(tokenAddress: string): boolean {
-    return this.blacklistedTokens.has(tokenAddress);
-  }
-
-  /**
-   * Checks if transaction passes amount filter
-   */
-  private passesAmountFilter(
-    transaction: Transaction, 
-    options: FilterOptions
-  ): boolean {
-    if (options.minAmount && transaction.amount < options.minAmount) {
-      return false;
-    }
     
-    if (options.maxAmount && transaction.amount > options.maxAmount) {
-      return false;
-    }
+    return groups;
+  }
+
+  calculateProfitLoss(trades: Transaction[]): number {
+    let totalPnL = 0;
+    const holdings = new Map<string, { amount: number; avgPrice: number }>();
     
-    return true;
-  }
-
-  /**
-   * Checks if transaction passes token filter
-   */
-  private passesTokenFilter(
-    transaction: Transaction, 
-    options: FilterOptions
-  ): boolean {
-    if (!options.tokenAddresses || options.tokenAddresses.length === 0) {
-      return true;
-    }
-    
-    return options.tokenAddresses.includes(transaction.token.address);
-  }
-
-  /**
-   * Checks if transaction passes wallet filter
-   */
-  private passesWalletFilter(
-    transaction: Transaction, 
-    options: FilterOptions
-  ): boolean {
-    if (!options.walletAddresses || options.walletAddresses.length === 0) {
-      return true;
-    }
-    
-    return options.walletAddresses.includes(transaction.from) || 
-           options.walletAddresses.includes(transaction.to);
-  }
-
-  /**
-   * Checks if transaction passes type filter
-   */
-  private passesTypeFilter(
-    transaction: Transaction, 
-    options: FilterOptions
-  ): boolean {
-    if (!options.transactionTypes || options.transactionTypes.length === 0) {
-      return true;
-    }
-    
-    return options.transactionTypes.includes(transaction.type);
-  }
-
-  /**
-   * Checks if transaction passes date filter
-   */
-  private passesDateFilter(
-    transaction: Transaction, 
-    options: FilterOptions
-  ): boolean {
-    if (!options.dateRange) {
-      return true;
-    }
-    
-    const txDate = new Date(transaction.timestamp);
-    
-    if (options.dateRange.start && txDate < options.dateRange.start) {
-      return false;
-    }
-    
-    if (options.dateRange.end && txDate > options.dateRange.end) {
-      return false;
-    }
-    
-    return true;
-  }
-
-  /**
-   * Adds a token to the blacklist
-   */
-  public addToBlacklist(tokenAddress: string): void {
-    this.blacklistedTokens.add(tokenAddress);
-  }
-
-  /**
-   * Removes a token from the blacklist
-   */
-  public removeFromBlacklist(tokenAddress: string): void {
-    this.blacklistedTokens.delete(tokenAddress);
-  }
-
-  /**
-   * Adds a wallet to the whitelist
-   */
-  public addToWhitelist(walletAddress: string): void {
-    this.whitelistedWallets.add(walletAddress);
-  }
-
-  /**
-   * Removes a wallet from the whitelist
-   */
-  public removeFromWhitelist(walletAddress: string): void {
-    this.whitelistedWallets.delete(walletAddress);
-  }
-
-  /**
-   * Gets trading-relevant transactions only
-   */
-  public getTradingTransactions(transactions: Transaction[]): Transaction[] {
-    const tradingTypes = [
-      TransactionType.SWAP,
-      TransactionType.TRANSFER
-    ];
-
-    return this.filterTransactions(transactions, {
-      transactionTypes: tradingTypes,
-      minAmount: CONSTANTS.TRANSACTION.MIN_AMOUNT_FILTER
+    trades.forEach(trade => {
+      const token = trade.token?.address || 'SOL';
+      const classification = this.classifyTransaction(trade);
+      
+      if (classification === 'BUY') {
+        const current = holdings.get(token) || { amount: 0, avgPrice: 0 };
+        const newAmount = current.amount + trade.amount;
+        const newAvgPrice = ((current.avgPrice * current.amount) + (trade.price * trade.amount)) / newAmount;
+        holdings.set(token, { amount: newAmount, avgPrice: newAvgPrice });
+      } else if (classification === 'SELL') {
+        const current = holdings.get(token);
+        if (current && current.amount > 0) {
+          const sellAmount = Math.min(trade.amount, current.amount);
+          totalPnL += (trade.price - current.avgPrice) * sellAmount;
+          current.amount -= sellAmount;
+        }
+      }
     });
-  }
-
-  /**
-   * Clears all filters
-   */
-  public clearFilters(): void {
-    this.blacklistedTokens.clear();
-    this.whitelistedWallets.clear();
+    
+    return totalPnL;
   }
 }
