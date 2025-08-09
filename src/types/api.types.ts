@@ -42,68 +42,69 @@ export enum HTTPMethod {
   PATCH = 'PATCH'
 }
 
-export interface HeliusTransactionResponse {
-  signature: string;
+export interface SimpleTransactionData {
+  id: string;
+  amount: number;
   timestamp: number;
-  slot: number;
-  fee: number;
-  status: string;
-  type: string;
-  source: string;
-  accountData: AccountData[];
-  tokenTransfers: TokenTransfer[];
+  walletAddress: string;
+  tokenMint: string;
+  transactionType: 'BUY' | 'SELL' | 'TRANSFER';
+  priceUSD: number;
+  success: boolean;
+  gasFee: number;
 }
 
-export interface AccountData {
-  account: string;
-  nativeBalanceChange: number;
-  tokenBalanceChanges: TokenBalanceChange[];
-}
-
-export interface TokenBalanceChange {
+export interface TokenPriceData {
   mint: string;
-  rawTokenAmount: RawTokenAmount;
-  tokenAccount: string;
-  userAccount: string;
-}
-
-export interface RawTokenAmount {
-  decimals: number;
-  tokenAmount: string;
-}
-
-export interface TokenTransfer {
-  fromTokenAccount: string;
-  toTokenAccount: string;
-  fromUserAccount: string;
-  toUserAccount: string;
-  tokenAmount: number;
-  mint: string;
-  tokenStandard: string;
-}
-
-export interface BirdeyeTokenResponse {
-  address: string;
   symbol: string;
-  name: string;
-  decimals: number;
-  liquidity: number;
-  price: number;
+  currentPrice: number;
   priceChange24h: number;
   volume24h: number;
   marketCap: number;
-  holders: number;
-  logoURI?: string;
-  twitter?: string;
-  telegram?: string;
-  website?: string;
+  lastUpdate: number;
 }
 
-export interface BirdeyePriceResponse {
-  value: number;
-  updateUnixTime: number;
-  updateHumanTime: string;
-  priceChange24h: number;
+export interface WalletAnalytics {
+  address: string;
+  totalTransactions: number;
+  totalVolumeUSD: number;
+  profitLossUSD: number;
+  winRate: number;
+  averageHoldTime: number;
+  riskScore: number;
+  activeTokens: string[];
+  lastActivityTime: number;
+}
+
+export interface MarketSummary {
+  totalMarketCap: number;
+  totalVolume24h: number;
+  topGainers: TokenPriceData[];
+  topLosers: TokenPriceData[];
+  trendingTokens: string[];
+  marketSentiment: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  lastUpdated: number;
+}
+
+export interface AlertConfiguration {
+  id: string;
+  type: 'PRICE_ABOVE' | 'PRICE_BELOW' | 'VOLUME_SPIKE' | 'NEW_TOKEN';
+  tokenMint?: string;
+  walletAddress?: string;
+  threshold: number;
+  enabled: boolean;
+  lastTriggered?: number;
+}
+
+export interface TradeSignal {
+  tokenMint: string;
+  signalType: 'BUY' | 'SELL' | 'HOLD';
+  confidence: number;
+  reasoning: string[];
+  priceTarget?: number;
+  stopLoss?: number;
+  timeframe: '5m' | '15m' | '1h' | '4h' | '1d';
+  generatedAt: number;
 }
 
 export interface PaginatedResponse<T> {
