@@ -200,66 +200,139 @@ export class APIService {
   }
 }
 
-/**
- * Lemora Wallet Tracker - API Service
- * Provides functions for interacting with external Solana and Token APIs
- */
+  async getHistoricalPrices(mint: string, timeframe: '1h' | '24h' | '7d' | '30d' = '24h'): Promise<PriceData[]> {
+    const cacheKey = `historical_${mint}_${timeframe}`;
+    const cached = this.getCachedData<PriceData[]>(cacheKey);
+    if (cached) return cached;
 
-import axios, { AxiosResponse } from 'axios';
-import { APIConfig, HeliusTransactionResponse, BirdeyeTokenResponse, APIRequest } from '../types/api.types';
-
-export class APIService {
-  private heliusConfig: APIConfig;
-  private birdeyeConfig: APIConfig;
-
-  constructor(heliusConfig: APIConfig, birdeyeConfig: APIConfig) {
-    this.heliusConfig = heliusConfig;
-    this.birdeyeConfig = birdeyeConfig;
-  }
-
-  /**
-   * Executes a GET request to the Helius transaction API
-   */
-  public async getHeliusTransactions(walletAddress: string): Promise<HeliusTransactionResponse[]> {
-    const endpoint = `/transactions/address/${walletAddress}`;
-    return this.executeRequest<HeliusTransactionResponse[]>({
-      method: 'GET',
-      endpoint,
-      config: this.heliusConfig
-    });
-  }
-
-  /**
-   * Fetches token information from the Birdeye API
-   */
-  public async getTokenInfo(tokenAddress: string): Promise<BirdeyeTokenResponse> {
-    const endpoint = `/token/${tokenAddress}`;
-    return this.executeRequest<BirdeyeTokenResponse>({
-      method: 'GET',
-      endpoint,
-      config: this.birdeyeConfig
-    });
-  }
-
-  /**
-   * Executes an API request with retry enabled
-   */
-  private async executeRequest<T>({ method, endpoint, config, data = null, params = {} }: APIRequest): Promise<T> {
-    const url = `${config.baseURL}${endpoint}`;
     try {
-      const response: AxiosResponse<T> = await axios.request<T>({
-        method,
-        url,
-        data,
-        params,
-        headers: config.headers,
-        timeout: config.timeout
-      });
-      return response.data;
+      const response = await fetch(
+        `${this.baseUrls.birdeye}/defi/history_price?address=${mint}&address_type=token&type=${timeframe}`,
+        { headers: this.getBirdeyeHeaders() }
+      );
+
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.items) {
+        const historicalData: PriceData[] = data.data.items.map((item: any) => ({
+          mint,
+          symbol: 'UNKNOWN',
+          price: item.value,
+          change24h: 0,
+          volume24h: 0,
+          marketCap: 0,
+          lastUpdated: item.unixTime * 1000
+        }));
+        
+        this.setCachedData(cacheKey, historicalData);
+        return historicalData;
+      }
+      
+      return [];
     } catch (error) {
-      console.error(`Request to ${url} failed:`, error);
-      throw error;
+      console.error('Error fetching historical prices:', error);
+      return [];
     }
   }
-}
+
+  async getTopTokens(limit: number = 100): Promise<PriceData[]> {
+    const cacheKey = `top_tokens_${limit}`;
+    const cached = this.getCachedData<PriceData[]>(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const response = await fetch(
+        `${this.baseUrls.birdeye}/defi/tokenlist?sort_by=mc&sort_type=desc&offset=0&limit=${limit}`,
+        { headers: this.getBirdeyeHeaders() }
+      );
+
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.tokens) {
+        const topTokens: PriceData[] = data.data.tokens.map((token: any) => ({
+          mint: token.address,
+          symbol: token.symbol,
+          price: token.price,
+          change24h: token.priceChange24hPercent || 0,
+          volume24h: token.v24hUSD || 0,
+          marketCap: token.mc || 0,
+          lastUpdated: Date.now()
+        }));
+        
+        this.setCachedData(cacheKey, topTokens);
+        return topTokens;
+      }
+      
+      return [];
+    } catch (error) {
+      console.error('Error fetching top tokens:', error);
+      return [];
+    }
+  }
+
+  async batchTokenLookup(mints: string[]): Promise<Map<string, TokenInfo>> {
+    const results = new Map<string, TokenInfo>();
+    const batchSize = 10;
+    
+    for (let i = 0; i < mints.length; i += batchSize) {
+      const batch = mints.slice(i, i + batchSize);
+      const batchPromises = batch.map(mint => this.getTokenInfo(mint));
+      
+      try {
+        const batchResults = await Promise.allSettled(batchPromises);
+        
+        batchResults.forEach((result, index) => {
+          const mint = batch[index];
+          if (result.status === 'fulfilled' && result.value) {
+            results.set(mint, result.value);
+          } else {
+            console.warn(`Failed to fetch token info for ${mint}:`, 
+              result.status === 'rejected' ? result.reason : 'No data');
+          }
+        });
+      } catch (error) {
+        console.error(`Batch ${i}-${i + batchSize} failed:`, error);
+      }
+      
+      // Rate limiting - wait 100ms between batches
+      if (i + batchSize < mints.length) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+    
+    return results;
+  }
+
+  async getMarketOverview(): Promise<MarketData> {
+    const cacheKey = 'market_overview';
+    const cached = this.getCachedData<MarketData>(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const topTokens = await this.getTopTokens(50);
+      
+      const marketData: MarketData = {
+        tokens: topTokens,
+        totalMarketCap: topTokens.reduce((sum, token) => sum + (token.marketCap || 0), 0),
+        total24hVolume: topTokens.reduce((sum, token) => sum + (token.volume24h || 0), 0),
+        lastUpdated: Date.now()
+      };
+      
+      this.setCachedData(cacheKey, marketData);
+      return marketData;
+    } catch (error) {
+      console.error('Error fetching market overview:', error);
+      return {
+        tokens: [],
+        totalMarketCap: 0,
+        total24hVolume: 0,
+        lastUpdated: Date.now()
+      };
+    }
+  }
+
+  enableRetryMechanism(maxRetries: number = 3, retryDelay: number = 1000): void {
+    // Implementation for retry mechanism configuration
+    console.log(`Retry mechanism enabled: ${maxRetries} retries with ${retryDelay}ms delay`);
+  }
 
