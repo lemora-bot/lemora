@@ -1,79 +1,82 @@
-/**
- * Lemora Wallet Tracker - Wallet-specific Type Definitions
- * Extended types for wallet management and tracking
- */
-
-import { Transaction } from './index';
-
-export interface ExtendedWalletData {
+export interface QuickWallet {
   address: string;
-  publicKey: string;
-  balance: WalletBalance;
-  metadata: WalletMetadata;
-  transactions: Transaction[];
-  trackedTokens: TrackedToken[];
-  alerts: WalletAlert[];
+  label?: string;
+  solBalance: number;
+  usdValue: number;
+  isActive: boolean;
 }
 
-export interface WalletBalance {
-  sol: number;
-  tokens: TokenBalance[];
-  totalValueUSD: number;
-  lastUpdated: Date;
-}
-
-export interface TokenBalance {
-  tokenAddress: string;
-  amount: number;
-  decimals: number;
-  usdValue?: number;
-  percentage?: number;
-}
-
-export interface WalletMetadata {
-  name?: string;
-  tags: string[];
-  createdAt: Date;
-  lastActive: Date;
-  riskScore?: number;
-  notes?: string;
-}
-
-export interface TrackedToken {
-  address: string;
+export interface TokenHolding {
+  mint: string;
   symbol: string;
-  addedAt: Date;
-  priceAlerts: PriceAlert[];
-  autoSell?: AutoSellConfig;
+  amount: number;
+  value: number;
 }
 
-export interface PriceAlert {
+export interface TradingProfile {
+  walletAddress: string;
+  totalTrades: number;
+  winningTrades: number;
+  totalPnL: number;
+  bestTrade: number;
+  worstTrade: number;
+  averageTradeSize: number;
+  favoriteTokens: string[];
+  tradingFrequency: 'LOW' | 'MEDIUM' | 'HIGH';
+  riskLevel: 'CONSERVATIVE' | 'MODERATE' | 'AGGRESSIVE';
+}
+
+export interface SimpleNotification {
   id: string;
-  type: 'ABOVE' | 'BELOW';
-  price: number;
-  enabled: boolean;
-  createdAt: Date;
-}
-
-export interface AutoSellConfig {
-  enabled: boolean;
-  triggerPrice: number;
-  sellPercentage: number;
-}
-
-export interface WalletAlert {
-  id: string;
-  type: WalletAlertType;
   message: string;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH';
-  timestamp: Date;
+  type: 'INFO' | 'WARNING' | 'ERROR';
+  timestamp: number;
   read: boolean;
 }
 
-export enum WalletAlertType {
-  LARGE_TRANSACTION = 'LARGE_TRANSACTION',
-  PRICE_ALERT = 'PRICE_ALERT',
-  SUSPICIOUS_ACTIVITY = 'SUSPICIOUS_ACTIVITY',
-  TOKEN_LISTING = 'TOKEN_LISTING',
-  WALLET_COMPROMISE = 'WALLET_COMPROMISE'
+export interface WalletPerformance {
+  address: string;
+  dailyPnL: number;
+  weeklyPnL: number;
+  monthlyPnL: number;
+  totalReturn: number;
+  sharpeRatio: number;
+  maxDrawdown: number;
+  volatility: number;
+  lastUpdated: number;
+}
+
+export interface TradeHistory {
+  trades: QuickTrade[];
+  summary: TradingSummary;
+  timeRange: {
+    start: number;
+    end: number;
+  };
+}
+
+export interface QuickTrade {
+  id: string;
+  tokenMint: string;
+  tokenSymbol: string;
+  action: 'BUY' | 'SELL';
+  amount: number;
+  priceUSD: number;
+  totalValueUSD: number;
+  timestamp: number;
+  pnl?: number;
+}
+
+export interface TradingSummary {
+  totalTrades: number;
+  profitable: number;
+  unprofitable: number;
+  breakeven: number;
+  totalVolume: number;
+  netPnL: number;
+  winRate: number;
+  avgWin: number;
+  avgLoss: number;
+  largestWin: number;
+  largestLoss: number;
 }
