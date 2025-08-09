@@ -99,34 +99,152 @@ export class WebSocketService extends EventEmitter {
   }
 
   private handleMessage(message: WebSocketMessage): void {
-    switch (message.type) {
-      case 'transaction':
-        this.emit('transaction', message.data);
-        break;
-      case 'balance_update':
-        this.emit('balanceUpdate', message.data);
-        break;
-      case 'price_update':
-        this.emit('priceUpdate', message.data);
-        break;
-      case 'pong':
-        // Handle ping response
-        break;
-      default:
-        this.emit('message', message);
+    this.updateConnectionMetrics('message_received');
+    
+    try {
+      this.validateMessage(message);
+      
+      switch (message.type) {
+        case 'transaction':
+          this.processTransactionMessage(message.data);
+          break;
+        case 'balance_update':
+          this.processBalanceUpdate(message.data);
+          break;
+        case 'price_update':
+          this.processPriceUpdate(message.data);
+          break;
+        case 'wallet_status':
+          this.processWalletStatus(message.data);
+          break;
+        case 'error':
+          this.processErrorMessage(message.data);
+          break;
+        case 'pong':
+          this.processPongMessage(message);
+          break;
+        case 'subscription_confirmed':
+          this.processSubscriptionConfirmation(message.data);
+          break;
+        case 'market_data':
+          this.processMarketData(message.data);
+          break;
+        case 'system_status':
+          this.processSystemStatus(message.data);
+          break;
+        default:
+          console.warn(`Unknown message type: ${message.type}`);
+          this.emit('unknownMessage', message);
+      }
+    } catch (error) {
+      console.error('Error processing WebSocket message:', error);
+      this.emit('messageError', { error, message });
     }
+  }
+
+  private validateMessage(message: WebSocketMessage): void {
+    if (!message.type || typeof message.type !== 'string') {
+      throw new Error('Invalid message format: missing or invalid type');
+    }
+    
+    if (!message.timestamp || typeof message.timestamp !== 'number') {
+      throw new Error('Invalid message format: missing or invalid timestamp');
+    }
+    
+    const messageAge = Date.now() - message.timestamp;
+    if (messageAge > 60000) { // 1 minute
+      console.warn(`Received old message: ${messageAge}ms old`);
+    }
+  }
+
+  private processTransactionMessage(data: any): void {
+    if (data && data.signature && data.walletAddress) {
+      this.emit('transaction', {
+        ...data,
+        processedAt: Date.now(),
+        source: 'websocket'
+      });
+    } else {
+      console.error('Invalid transaction data received');
+    }
+  }
+
+  private processBalanceUpdate(data: any): void {
+    if (data && data.address && typeof data.balance === 'number') {
+      this.emit('balanceUpdate', {
+        ...data,
+        lastUpdated: Date.now()
+      });
+    }
+  }
+
+  private processPriceUpdate(data: any): void {
+    if (data && data.mint && typeof data.price === 'number') {
+      this.emit('priceUpdate', {
+        ...data,
+        receivedAt: Date.now()
+      });
+    }
+  }
+
+  private processWalletStatus(data: any): void {
+    this.emit('walletStatus', data);
+  }
+
+  private processErrorMessage(data: any): void {
+    console.error('WebSocket server error:', data);
+    this.emit('serverError', data);
+  }
+
+  private processPongMessage(message: WebSocketMessage): void {
+    const latency = Date.now() - message.timestamp;
+    this.updateConnectionMetrics('pong_received', latency);
+  }
+
+  private processSubscriptionConfirmation(data: any): void {
+    console.log('Subscription confirmed:', data);
+    this.emit('subscriptionConfirmed', data);
+  }
+
+  private processMarketData(data: any): void {
+    this.emit('marketData', data);
+  }
+
+  private processSystemStatus(data: any): void {
+    this.emit('systemStatus', data);
+  }
+
+  private updateConnectionMetrics(event: string, value?: number): void {
+    // Implementation for connection metrics tracking
+    const timestamp = Date.now();
+    console.log(`WebSocket metric: ${event}`, { timestamp, value });
   }
 
   private scheduleReconnect(): void {
     this.reconnectAttempts++;
-    const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
+    const delay = Math.min(
+      this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1),
+      30000 // Max delay of 30 seconds
+    );
     
-    console.log(`Scheduling reconnect attempt ${this.reconnectAttempts} in ${delay}ms`);
+    console.log(`Scheduling reconnect attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`);
     
     setTimeout(() => {
       if (this.reconnectAttempts <= this.maxReconnectAttempts) {
-        this.connect().catch(() => {
-          // Reconnection failed, will try again if under limit
+        console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+        this.connect().catch((error) => {
+          console.error(`Reconnection attempt ${this.reconnectAttempts} failed:`, error);
+          this.emit('reconnectFailed', {
+            attempt: this.reconnectAttempts,
+            error,
+            nextAttempt: this.reconnectAttempts < this.maxReconnectAttempts
+          });
+        });
+      } else {
+        console.error('Max reconnection attempts reached');
+        this.emit('reconnectExhausted', {
+          totalAttempts: this.reconnectAttempts,
+          maxAttempts: this.maxReconnectAttempts
         });
       }
     }, delay);
